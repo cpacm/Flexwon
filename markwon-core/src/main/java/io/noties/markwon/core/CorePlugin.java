@@ -212,7 +212,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Text text) {
 
-                String literal = text.toAstString(true);
+                String literal = text.getChars().unescape();
                 visitor.builder().append(literal);
 
                 // @since 4.0.0
@@ -277,7 +277,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 // unfortunately we cannot use this for multiline code as we cannot control where a new line break will be inserted
                 visitor.builder()
                         .append('\u00a0')
-                        .append(code.toAstString(true))
+                        .append(code.getText().unescape())
                         .append('\u00a0');
 
                 visitor.setSpansForNodeOptional(code, length);
@@ -289,7 +289,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         builder.on(FencedCodeBlock.class, new MarkwonVisitor.NodeVisitor<FencedCodeBlock>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull FencedCodeBlock fencedCodeBlock) {
-                visitCodeBlock(visitor, fencedCodeBlock.getInfo().unescape(), fencedCodeBlock.toAstString(true), fencedCodeBlock);
+                visitCodeBlock(visitor, fencedCodeBlock.getInfo().unescape(), fencedCodeBlock.getChars().unescape(), fencedCodeBlock);
             }
         });
     }
@@ -298,7 +298,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         builder.on(IndentedCodeBlock.class, new MarkwonVisitor.NodeVisitor<IndentedCodeBlock>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull IndentedCodeBlock indentedCodeBlock) {
-                visitCodeBlock(visitor, null, indentedCodeBlock.toAstString(true), indentedCodeBlock);
+                visitCodeBlock(visitor, null, indentedCodeBlock.getChars().unescape(), indentedCodeBlock);
             }
         });
     }

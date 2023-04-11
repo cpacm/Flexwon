@@ -161,13 +161,13 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
                 .on(HtmlBlock.class, new MarkwonVisitor.NodeVisitor<HtmlBlock>() {
                     @Override
                     public void visit(@NonNull MarkwonVisitor visitor, @NonNull HtmlBlock htmlBlock) {
-                        visitHtml(visitor, htmlBlock.toAstString(false));
+                        visitHtml(visitor, htmlBlock.getChars().unescape());
                     }
                 })
                 .on(HtmlInline.class, new MarkwonVisitor.NodeVisitor<HtmlInline>() {
                     @Override
                     public void visit(@NonNull MarkwonVisitor visitor, @NonNull HtmlInline htmlInline) {
-                        visitHtml(visitor, htmlInline.toAstString(false));
+                        visitHtml(visitor, htmlInline.getChars().unescape());
                     }
                 });
     }
