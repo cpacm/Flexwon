@@ -80,7 +80,7 @@ ext {
             'x-appcompat'             : 'androidx.appcompat:appcompat:1.1.0',
             'x-cardview'              : 'androidx.cardview:cardview:1.0.0',
             'x-fragment'              : 'androidx.fragment:fragment:1.0.0',
-            'flexmark'                : 'com.vladsch.flexmark:flexmark-all:0.64.0',
+            'flexmark'                : 'com.vladsch.flexmark:flexmark-all:0.64.6',
             'commonmark'              : "com.atlassian.commonmark:commonmark:$commonMarkVersion",
             'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",

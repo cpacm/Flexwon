@@ -11,6 +11,7 @@ import androidx.annotation.VisibleForTesting;
 
 import com.vladsch.flexmark.ast.BlockQuote;
 import com.vladsch.flexmark.ast.BulletList;
+import com.vladsch.flexmark.ast.BulletListItem;
 import com.vladsch.flexmark.ast.Code;
 import com.vladsch.flexmark.ast.Emphasis;
 import com.vladsch.flexmark.ast.FencedCodeBlock;
@@ -23,6 +24,7 @@ import com.vladsch.flexmark.ast.Link;
 import com.vladsch.flexmark.ast.ListBlock;
 import com.vladsch.flexmark.ast.ListItem;
 import com.vladsch.flexmark.ast.OrderedList;
+import com.vladsch.flexmark.ast.OrderedListItem;
 import com.vladsch.flexmark.ast.Paragraph;
 import com.vladsch.flexmark.ast.SoftLineBreak;
 import com.vladsch.flexmark.ast.StrongEmphasis;
@@ -155,8 +157,9 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         indentedCodeBlock(builder);
         image(builder);
         bulletList(builder);
+        bulletListItem(builder);
         orderedList(builder);
-        listItem(builder);
+        orderedListItem(builder);
         thematicBreak(builder);
         heading(builder);
         softLineBreak(builder);
@@ -385,20 +388,14 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         builder.on(OrderedList.class, new SimpleBlockNodeVisitor());
     }
 
-    private static void listItem(@NonNull MarkwonVisitor.Builder builder) {
-        builder.on(ListItem.class, new MarkwonVisitor.NodeVisitor<ListItem>() {
+    private static void orderedListItem(@NonNull MarkwonVisitor.Builder builder) {
+        builder.on(OrderedListItem.class, new MarkwonVisitor.NodeVisitor<OrderedListItem>() {
             @Override
-            public void visit(@NonNull MarkwonVisitor visitor, @NonNull ListItem listItem) {
-
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull OrderedListItem orderedListItem) {
                 final int length = visitor.length();
-
-                // it's important to visit children before applying render props (
-                // we can have nested children, who are list items also, thus they will
-                // override out props (if we set them before visiting children)
-                visitor.visitChildren(listItem);
-
-                final Node parent = listItem.getParent();
+                final Node parent = orderedListItem.getParent();
                 if (parent instanceof OrderedList) {
+                    visitor.visitChildren(orderedListItem);
 
                     final int start = ((OrderedList) parent).getStartNumber();
 
@@ -408,12 +405,33 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                     // after we have visited the children increment start number
                     final OrderedList orderedList = (OrderedList) parent;
                     orderedList.setStartNumber(orderedList.getStartNumber() + 1);
+                }
+                visitor.setSpansForNodeOptional(orderedListItem, length);
 
-                } else {
+                if (visitor.hasNext(orderedListItem)) {
+                    visitor.ensureNewLine();
+                }
+            }
+        });
+    }
+
+    private static void bulletListItem(@NonNull MarkwonVisitor.Builder builder) {
+        builder.on(BulletListItem.class, new MarkwonVisitor.NodeVisitor<BulletListItem>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull BulletListItem listItem) {
+
+                final int length = visitor.length();
+
+                // it's important to visit children before applying render props (
+                // we can have nested children, who are list items also, thus they will
+                // override out props (if we set them before visiting children)
+                visitor.visitChildren(listItem);
+
+                final Node parent = listItem.getParent();
+                if (parent instanceof BulletList) {
                     CoreProps.LIST_ITEM_TYPE.set(visitor.renderProps(), CoreProps.ListItemType.BULLET);
                     CoreProps.BULLET_LIST_ITEM_LEVEL.set(visitor.renderProps(), listLevel(listItem));
                 }
-
                 visitor.setSpansForNodeOptional(listItem, length);
 
                 if (visitor.hasNext(listItem)) {
