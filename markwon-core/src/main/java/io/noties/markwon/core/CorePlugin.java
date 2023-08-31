@@ -181,7 +181,8 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 .setFactory(Code.class, new CodeSpanFactory())
                 .setFactory(FencedCodeBlock.class, codeBlockSpanFactory)
                 .setFactory(IndentedCodeBlock.class, codeBlockSpanFactory)
-                .setFactory(ListItem.class, new ListItemSpanFactory())
+                .setFactory(BulletListItem.class, new ListItemSpanFactory())
+                .setFactory(OrderedListItem.class, new ListItemSpanFactory())
                 .setFactory(Heading.class, new HeadingSpanFactory())
                 .setFactory(Link.class, new LinkSpanFactory())
                 .setFactory(ThematicBreak.class, new ThematicBreakSpanFactory());
