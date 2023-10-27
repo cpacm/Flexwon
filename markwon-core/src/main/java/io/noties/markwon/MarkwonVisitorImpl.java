@@ -3,40 +3,10 @@ package io.noties.markwon;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.vladsch.flexmark.ast.AutoLink;
-import com.vladsch.flexmark.ast.BlockQuote;
-import com.vladsch.flexmark.ast.BulletList;
-import com.vladsch.flexmark.ast.BulletListItem;
-import com.vladsch.flexmark.ast.Code;
-import com.vladsch.flexmark.ast.Emphasis;
-import com.vladsch.flexmark.ast.FencedCodeBlock;
-import com.vladsch.flexmark.ast.HardLineBreak;
-import com.vladsch.flexmark.ast.Heading;
-import com.vladsch.flexmark.ast.HtmlBlock;
-import com.vladsch.flexmark.ast.HtmlCommentBlock;
-import com.vladsch.flexmark.ast.HtmlEntity;
-import com.vladsch.flexmark.ast.HtmlInline;
-import com.vladsch.flexmark.ast.HtmlInlineComment;
-import com.vladsch.flexmark.ast.Image;
-import com.vladsch.flexmark.ast.ImageRef;
-import com.vladsch.flexmark.ast.IndentedCodeBlock;
-import com.vladsch.flexmark.ast.Link;
-import com.vladsch.flexmark.ast.LinkRef;
-import com.vladsch.flexmark.ast.ListItem;
-import com.vladsch.flexmark.ast.MailLink;
-import com.vladsch.flexmark.ast.OrderedList;
-import com.vladsch.flexmark.ast.OrderedListItem;
-import com.vladsch.flexmark.ast.Paragraph;
-import com.vladsch.flexmark.ast.Reference;
-import com.vladsch.flexmark.ast.SoftLineBreak;
-import com.vladsch.flexmark.ast.StrongEmphasis;
-import com.vladsch.flexmark.ast.Text;
-import com.vladsch.flexmark.ast.ThematicBreak;
-import com.vladsch.flexmark.ast.util.BlockVisitorExt;
-import com.vladsch.flexmark.ast.util.InlineVisitorExt;
-import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.ast.VisitHandler;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,165 +39,14 @@ class MarkwonVisitorImpl extends com.vladsch.flexmark.util.ast.NodeVisitor imple
         this.nodes = nodes;
         this.blockHandler = blockHandler;
 
-        addHandlers(BlockVisitorExt.VISIT_HANDLERS(this));
-        addHandlers(InlineVisitorExt.VISIT_HANDLERS(this));
-    }
+        ArrayList<VisitHandler<?>> handlers = new ArrayList<>();
+        for (Class<? extends Node> nodeClass : nodes.keySet()) {
+            handlers.add(new VisitHandler<>(nodeClass, this::visitImpl));
+        }
+        addHandlers(handlers.toArray(new VisitHandler<?>[]{}));
 
-    @Override
-    public void visit(BlockQuote blockQuote) {
-        visitImpl(blockQuote);
-    }
-
-    @Override
-    public void visit(BulletList bulletList) {
-        visitImpl(bulletList);
-    }
-
-    @Override
-    public void visit(AutoLink autoLink) {
-        visitImpl(autoLink);
-    }
-
-    @Override
-    public void visit(Code code) {
-        visitImpl(code);
-    }
-
-    @Override
-    public void visit(Document document) {
-        visitImpl(document);
-    }
-
-    @Override
-    public void visit(Emphasis emphasis) {
-        visitImpl(emphasis);
-    }
-
-    @Override
-    public void visit(FencedCodeBlock fencedCodeBlock) {
-        visitImpl(fencedCodeBlock);
-    }
-
-    public void visit(HardLineBreak hardLineBreak) {
-        visitImpl(hardLineBreak);
-    }
-
-    @Override
-    public void visit(HtmlEntity node) {
-        visitImpl(node);
-    }
-
-    @Override
-    public void visit(Heading heading) {
-        visitImpl(heading);
-    }
-
-    @Override
-    public void visit(ThematicBreak thematicBreak) {
-        visitImpl(thematicBreak);
-    }
-
-    @Override
-    public void visit(HtmlInline htmlInline) {
-        visitImpl(htmlInline);
-    }
-
-    @Override
-    public void visit(HtmlInlineComment node) {
-        visitImpl(node);
-    }
-
-    @Override
-    public void visit(HtmlBlock htmlBlock) {
-        visitImpl(htmlBlock);
-    }
-
-    @Override
-    public void visit(HtmlCommentBlock node) {
-        visitImpl(node);
-    }
-
-    /**
-     * ![Alt text](/path/to/img.jpg "Optional title")
-     */
-    @Override
-    public void visit(Image image) {
-        visitImpl(image);
-    }
-
-    /**
-     * This is a ![foo][bar] image.
-     * [bar]: /url/of/bar.jpg "optional title attribute"
-     */
-    @Override
-    public void visit(ImageRef imageRef) {
-        visitImpl(imageRef);
-    }
-
-    @Override
-    public void visit(IndentedCodeBlock indentedCodeBlock) {
-        visitImpl(indentedCodeBlock);
-    }
-
-
-//    @Override
-//    public void visit(ListItem listItem) {
-//        visitImpl(listItem);
-//    }
-
-    @Override
-    public void visit(BulletListItem listItem) {
-        visitImpl(listItem);
-    }
-
-    @Override
-    public void visit(OrderedListItem listItem) {
-        visitImpl(listItem);
-    }
-
-    @Override
-    public void visit(Link link) {
-        visitImpl(link);
-    }
-
-    @Override
-    public void visit(LinkRef node) {
-        visitImpl(node);
-    }
-
-    @Override
-    public void visit(MailLink node) {
-        visitImpl(node);
-    }
-
-    @Override
-    public void visit(OrderedList orderedList) {
-        visitImpl(orderedList);
-    }
-
-    @Override
-    public void visit(Paragraph paragraph) {
-        visitImpl(paragraph);
-    }
-
-    @Override
-    public void visit(Reference node) {
-        // Reference 需要和 ImageRef,LinkRef配合使用，因为这些都是指向 Reference,再由Reference指向真正的地址
-    }
-
-    @Override
-    public void visit(SoftLineBreak softLineBreak) {
-        visitImpl(softLineBreak);
-    }
-
-    @Override
-    public void visit(StrongEmphasis strongEmphasis) {
-        visitImpl(strongEmphasis);
-    }
-
-    @Override
-    public void visit(Text text) {
-        visitImpl(text);
+        //addHandlers(BlockVisitorExt.VISIT_HANDLERS(this));
+        //addHandlers(InlineVisitorExt.VISIT_HANDLERS(this));
     }
 
     private void visitImpl(@NonNull Node node) {

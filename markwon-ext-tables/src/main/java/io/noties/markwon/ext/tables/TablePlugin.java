@@ -8,9 +8,11 @@ import androidx.annotation.NonNull;
 
 import com.vladsch.flexmark.ext.tables.TableBlock;
 import com.vladsch.flexmark.ext.tables.TableBody;
+import com.vladsch.flexmark.ext.tables.TableCaption;
 import com.vladsch.flexmark.ext.tables.TableCell;
 import com.vladsch.flexmark.ext.tables.TableHead;
 import com.vladsch.flexmark.ext.tables.TableRow;
+import com.vladsch.flexmark.ext.tables.TableSeparator;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
@@ -150,6 +152,18 @@ public class TablePlugin extends AbstractMarkwonPlugin {
                         @Override
                         public void visit(@NonNull MarkwonVisitor visitor, @NonNull TableHead tableHead) {
                             visitRow(visitor, tableHead);
+                        }
+                    })
+                    .on(TableCaption.class, new MarkwonVisitor.NodeVisitor<TableCaption>() {
+                        @Override
+                        public void visit(@NonNull MarkwonVisitor visitor, @NonNull TableCaption tableCaption) {
+                            visitor.visitChildren(tableCaption);
+                        }
+                    })
+                    .on(TableSeparator.class, new MarkwonVisitor.NodeVisitor<TableSeparator>() {
+                        @Override
+                        public void visit(@NonNull MarkwonVisitor visitor, @NonNull TableSeparator tableSeparator) {
+                            // 用于决定cell的对齐方式，不做渲染
                         }
                     })
                     .on(TableCell.class, new MarkwonVisitor.NodeVisitor<TableCell>() {

@@ -3,9 +3,6 @@ package io.noties.markwon;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.vladsch.flexmark.ast.Heading;
-import com.vladsch.flexmark.ast.util.BlockVisitor;
-import com.vladsch.flexmark.ast.util.InlineVisitor;
 import com.vladsch.flexmark.util.ast.Node;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @see MarkwonPlugin#configureVisitor(Builder)
  * @since 3.0.0
  */
-public interface MarkwonVisitor extends BlockVisitor, InlineVisitor {
+public interface MarkwonVisitor{
 
     /**
      * @see Builder#on(Class, NodeVisitor)

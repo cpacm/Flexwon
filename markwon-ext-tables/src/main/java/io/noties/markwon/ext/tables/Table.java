@@ -5,16 +5,16 @@ import android.text.Spanned;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.vladsch.flexmark.ast.BlockQuote;
-import com.vladsch.flexmark.ast.util.BlockVisitorExt;
-import com.vladsch.flexmark.ast.util.InlineVisitorExt;
 import com.vladsch.flexmark.ext.tables.TableBlock;
+import com.vladsch.flexmark.ext.tables.TableBody;
+import com.vladsch.flexmark.ext.tables.TableCaption;
 import com.vladsch.flexmark.ext.tables.TableCell;
 import com.vladsch.flexmark.ext.tables.TableHead;
 import com.vladsch.flexmark.ext.tables.TableRow;
-import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.ext.tables.TableSeparator;
+import com.vladsch.flexmark.ext.tables.TableVisitor;
+import com.vladsch.flexmark.ext.tables.TableVisitorExt;
 import com.vladsch.flexmark.util.ast.NodeVisitor;
-import com.vladsch.flexmark.util.ast.VisitHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,7 +140,7 @@ public class Table {
                 '}';
     }
 
-    static class ParseVisitor extends NodeVisitor implements TableVisitor{
+    static class ParseVisitor extends NodeVisitor implements TableVisitor {
 
         private final Markwon markwon;
 
@@ -151,7 +151,7 @@ public class Table {
 
         ParseVisitor(@NonNull Markwon markwon) {
             this.markwon = markwon;
-            addHandlers(TableVisitor.VISIT_HANDLERS(this));
+            addHandlers(TableVisitorExt.VISIT_HANDLERS(this));
         }
 
         @Nullable
@@ -170,6 +170,16 @@ public class Table {
         }
 
         @Override
+        public void visit(TableCaption node) {
+            visitChildren(node);
+        }
+
+        @Override
+        public void visit(TableBlock node) {
+            visitChildren(node);
+        }
+
+        @Override
         public void visit(TableHead head) {
             visitChildren(head);
 
@@ -184,6 +194,16 @@ public class Table {
 
             pendingRow = null;
             pendingRowIsHeader = false;
+        }
+
+        @Override
+        public void visit(TableSeparator node) {
+            // 用于确定cell的对齐方式，不做渲染
+        }
+
+        @Override
+        public void visit(TableBody node) {
+            visitChildren(node);
         }
 
         @Override
