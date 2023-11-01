@@ -32,6 +32,7 @@ import com.vladsch.flexmark.ast.Text;
 import com.vladsch.flexmark.ast.ThematicBreak;
 import com.vladsch.flexmark.util.ast.Block;
 import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.sequence.BasedSequence;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -335,6 +336,10 @@ public class CorePlugin extends AbstractMarkwonPlugin {
 
                 final Node parent = image.getParent();
                 final boolean link = parent instanceof Link;
+                BasedSequence text = image.getText();
+                if (text == BasedSequence.NULL) {
+                    text = image.getTitle();
+                }
 
                 final String destination = configuration
                         .imageDestinationProcessor()
@@ -348,6 +353,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 ImageProps.DESTINATION.set(props, destination);
                 ImageProps.REPLACEMENT_TEXT_IS_LINK.set(props, link);
                 ImageProps.IMAGE_SIZE.set(props, null);
+                ImageProps.IMAGE_TEXT.set(props, text);
 
                 visitor.setSpans(length, spanFactory.getSpans(configuration, props));
             }

@@ -97,7 +97,8 @@ public class MarkwonTheme {
                 .blockQuoteWidth(dip.toPx(4))
                 .bulletListItemStrokeWidth(dip.toPx(1))
                 .headingBreakHeight(dip.toPx(1))
-                .thematicBreakHeight(dip.toPx(4));
+                .thematicBreakHeight(dip.toPx(4))
+                .imageTextMargin(dip.toPx(4));
     }
 
     protected static final int BLOCK_QUOTE_DEF_COLOR_ALPHA = 25;
@@ -187,6 +188,11 @@ public class MarkwonTheme {
     // by default paint.strokeWidth
     protected final int thematicBreakHeight;
 
+    protected final int imageTextMargin;
+    protected final int imageTextSize;
+    protected final int imageTextColor;
+
+
     protected MarkwonTheme(@NonNull Builder builder) {
         this.linkColor = builder.linkColor;
         this.isLinkedUnderlined = builder.isLinkUnderlined;
@@ -211,6 +217,22 @@ public class MarkwonTheme {
         this.headingTextSizeMultipliers = builder.headingTextSizeMultipliers;
         this.thematicBreakColor = builder.thematicBreakColor;
         this.thematicBreakHeight = builder.thematicBreakHeight;
+        this.imageTextMargin = builder.imageTextMargin;
+        this.imageTextSize = builder.imageTextSize;
+        this.imageTextColor = builder.imageTextColor;
+    }
+
+    /**
+     * @since 5.0.0
+     */
+    public void applyImageTextStyle(@NonNull Paint paint) {
+        paint.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+        if (imageTextColor != 0) {
+            paint.setColor(imageTextColor);
+        }
+        if (imageTextSize > 0) {
+            paint.setTextSize(imageTextSize);
+        }
     }
 
     /**
@@ -393,6 +415,10 @@ public class MarkwonTheme {
         return color;
     }
 
+    public int getImageTextMargin() {
+        return imageTextMargin;
+    }
+
     /**
      * @since 3.0.0
      */
@@ -485,6 +511,11 @@ public class MarkwonTheme {
         private int thematicBreakColor;
         private int thematicBreakHeight = -1;
 
+        private int imageTextMargin;
+        private int imageTextSize;
+        private int imageTextColor;
+
+
         Builder() {
         }
 
@@ -510,6 +541,9 @@ public class MarkwonTheme {
             this.headingTextSizeMultipliers = theme.headingTextSizeMultipliers;
             this.thematicBreakColor = theme.thematicBreakColor;
             this.thematicBreakHeight = theme.thematicBreakHeight;
+            this.imageTextMargin = theme.imageTextMargin;
+            this.imageTextSize = theme.imageTextSize;
+            this.imageTextColor = theme.imageTextColor;
         }
 
         @NonNull
@@ -676,10 +710,26 @@ public class MarkwonTheme {
             return this;
         }
 
+        public Builder imageTextMargin(@Px int imageTextMargin) {
+            this.imageTextMargin = imageTextMargin;
+            return this;
+        }
+
+        public Builder imageTextSize(@Px int imageTextSize) {
+            this.imageTextSize = imageTextSize;
+            return this;
+        }
+
+        public Builder imageTextColor(@ColorInt int imageTextColor) {
+            this.imageTextColor = imageTextColor;
+            return this;
+        }
+
         @NonNull
         public MarkwonTheme build() {
             return new MarkwonTheme(this);
         }
+
     }
 
 }
