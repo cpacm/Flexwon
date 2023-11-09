@@ -294,7 +294,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         builder.on(FencedCodeBlock.class, new MarkwonVisitor.NodeVisitor<FencedCodeBlock>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull FencedCodeBlock fencedCodeBlock) {
-                visitCodeBlock(visitor, fencedCodeBlock.getInfo().unescape(), fencedCodeBlock.getChars().unescape(), fencedCodeBlock);
+                visitCodeBlock(visitor, fencedCodeBlock.getInfo().unescape(), fencedCodeBlock.getContentChars().unescape(), fencedCodeBlock);
             }
         });
     }
@@ -303,7 +303,7 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         builder.on(IndentedCodeBlock.class, new MarkwonVisitor.NodeVisitor<IndentedCodeBlock>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull IndentedCodeBlock indentedCodeBlock) {
-                visitCodeBlock(visitor, null, indentedCodeBlock.getChars().unescape(), indentedCodeBlock);
+                visitCodeBlock(visitor, null, indentedCodeBlock.getContentChars().unescape(), indentedCodeBlock);
             }
         });
     }
