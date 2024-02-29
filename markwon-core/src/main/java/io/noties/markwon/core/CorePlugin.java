@@ -281,9 +281,10 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 // NB, in order to provide a _padding_ feeling code is wrapped inside two unbreakable spaces
                 // unfortunately we cannot use this for multiline code as we cannot control where a new line break will be inserted
                 visitor.builder()
-                        .append('\u00a0')
+                        //.append('\u00a0')
+                        .append('\u0008')
                         .append(code.getText().unescape())
-                        .append('\u00a0');
+                        .append('\u0008');
 
                 visitor.setSpansForNodeOptional(code, length);
             }
@@ -324,7 +325,6 @@ public class CorePlugin extends AbstractMarkwonPlugin {
                 }
 
                 final int length = visitor.length();
-
                 visitor.visitChildren(image);
 
                 // we must check if anything _was_ added, as we need at least one char to render
@@ -502,7 +502,11 @@ public class CorePlugin extends AbstractMarkwonPlugin {
         builder.on(SoftLineBreak.class, new MarkwonVisitor.NodeVisitor<SoftLineBreak>() {
             @Override
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull SoftLineBreak softLineBreak) {
-                visitor.builder().append(' ');
+                if (softLineBreak.getNext() instanceof Image) {
+                    visitor.ensureNewLine();
+                } else {
+                    visitor.builder().append(' ');
+                }
             }
         });
     }

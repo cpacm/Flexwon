@@ -11,6 +11,7 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.html.tag.BlockquoteHandler;
+import io.noties.markwon.html.tag.CenterHandler;
 import io.noties.markwon.html.tag.EmphasisHandler;
 import io.noties.markwon.html.tag.HeadingHandler;
 import io.noties.markwon.html.tag.ImageHandler;
@@ -130,6 +131,7 @@ public class HtmlPlugin extends AbstractMarkwonPlugin {
             // will check for the state and throw an exception if applicable
             builder.addDefaultTagHandler(ImageHandler.create());
             builder.addDefaultTagHandler(new LinkHandler());
+            builder.addDefaultTagHandler(new CenterHandler());
             builder.addDefaultTagHandler(new BlockquoteHandler());
             builder.addDefaultTagHandler(new SubScriptHandler());
             builder.addDefaultTagHandler(new SuperScriptHandler());
