@@ -35,8 +35,8 @@ import java.util.regex.Pattern;
 
 public class JLatexMathBlockParser extends AbstractBlockParser {
 
-    final private static Pattern OPENING_MATH = Pattern.compile("^\\${2,}(?!.*$)");
-    final private static Pattern CLOSING_MATH = Pattern.compile("^\\${2,}(?!.*$)(?=[ \t]*$)");
+    final private static Pattern OPENING_MATH = Pattern.compile("^\\${2,}(?!.*\\$)");
+    final private static Pattern CLOSING_MATH = Pattern.compile("^\\${2,}(?!.*\\$)(?=[ \t]*$)");
 
     final private JLatexMathBlock block = new JLatexMathBlock();
     private BlockContent content = new BlockContent();

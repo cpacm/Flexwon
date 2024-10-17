@@ -32,10 +32,10 @@ public class JLatexMathInlineParser implements InlineParserExtension {
 
     @Override
     public boolean parse(@NotNull LightInlineParser inlineParser) {
-        if (inlineParser.peek(1) == '`') {
+        if (inlineParser.peek() == '$') {
             BasedSequence input = inlineParser.getInput();
             Matcher matcher = inlineParser.matcher(MATH_PATTERN);
-            if (matcher == null) matcher = inlineParser.matcher(MATH_PATTERN2);
+            if (matcher == null || !matcher.find()) matcher = inlineParser.matcher(MATH_PATTERN2);
             if (matcher != null) {
                 inlineParser.flushTextNode();
 
