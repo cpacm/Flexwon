@@ -2,11 +2,12 @@ buildscript {
     ext.kotlin_version = '1.7.20'
     repositories {
         google()
+        gradlePluginPortal()
         jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.4.0'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.28.0'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.51.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
     }
@@ -17,6 +18,7 @@ allprojects {
         if (project.hasProperty('LOCAL_MAVEN_URL')) {
             maven { url LOCAL_MAVEN_URL }
         }
+        gradlePluginPortal()
         google()
         jcenter()
 //        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
@@ -80,7 +82,7 @@ ext {
             'x-appcompat'             : 'androidx.appcompat:appcompat:1.1.0',
             'x-cardview'              : 'androidx.cardview:cardview:1.0.0',
             'x-fragment'              : 'androidx.fragment:fragment:1.0.0',
-            'flexmark'                : 'com.vladsch.flexmark:flexmark-all:0.64.6',
+            'flexmark'                : 'com.vladsch.flexmark:flexmark-all:0.64.8',
             'commonmark'              : "com.atlassian.commonmark:commonmark:$commonMarkVersion",
             'commonmark-strikethrough': "com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:$commonMarkVersion",
             'commonmark-table'        : "com.atlassian.commonmark:commonmark-ext-gfm-tables:$commonMarkVersion",

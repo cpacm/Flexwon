@@ -14,8 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 import androidx.annotation.VisibleForTesting;
 
-import com.vladsch.flexmark.ext.gitlab.GitLabExtension;
-import com.vladsch.flexmark.ext.gitlab.GitLabInlineMath;
 import com.vladsch.flexmark.parser.Parser;
 
 import java.util.Collections;
@@ -155,19 +153,47 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void configureParser(@NonNull Parser.Builder builder) {
-        builder.extensions(Collections.singleton(GitLabExtension.create()));
-        if (config.blocksEnabled) {
-            builder.set(GitLabExtension.RENDER_BLOCK_MATH, true);
-        }
+        builder.extensions(Collections.singleton(JLatexMathExtension.create()));
     }
 
     @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
-        builder.on(GitLabInlineMath.class, new MarkwonVisitor.NodeVisitor<GitLabInlineMath>() {
+        builder.on(JLatexInlineMath.class, new MarkwonVisitor.NodeVisitor<JLatexInlineMath>() {
             @Override
-            public void visit(@NonNull MarkwonVisitor visitor, @NonNull GitLabInlineMath gitLabInlineMath) {
-                if (config.blocksEnabled) visitor.blockStart(gitLabInlineMath);
-                final String tex = gitLabInlineMath.getText().unescape();
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexInlineMath jLatexInlineMath) {
+                if (config.blocksEnabled) visitor.blockStart(jLatexInlineMath);
+                final String tex = jLatexInlineMath.getText().unescape();
+                final int length = visitor.length();
+
+                // @since 4.0.2 we cannot append _raw_ latex as a placeholder-text,
+                // because Android will draw formula for each line of text, thus
+                // leading to formula duplicated (drawn on each line of text)
+                visitor.builder().append(prepareLatexTextPlaceholder(tex));
+
+                final MarkwonConfiguration configuration = visitor.configuration();
+
+                final AsyncDrawableSpan span = new JLatexAsyncDrawableSpan(
+                        configuration.theme(),
+                        new JLatextAsyncDrawable(
+                                tex,
+                                jLatextAsyncDrawableLoader,
+                                jLatexBlockImageSizeResolver,
+                                null,
+                                false),
+                        config.theme.blockTextColor()
+                );
+
+                visitor.setSpans(length, span);
+
+                if (config.blocksEnabled) visitor.blockEnd(jLatexInlineMath);
+            }
+        });
+
+        builder.on(JLatexMathBlock.class, new MarkwonVisitor.NodeVisitor<JLatexMathBlock>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull JLatexMathBlock jLatexMathBlock) {
+                if (config.blocksEnabled) visitor.blockStart(jLatexMathBlock);
+                final String tex = jLatexMathBlock.getContentChars().unescape();
                 final int length = visitor.length();
 
                 // @since 4.0.2 we cannot append _raw_ latex as a placeholder-text,
@@ -190,7 +216,7 @@ public class JLatexMathPlugin extends AbstractMarkwonPlugin {
 
                 visitor.setSpans(length, span);
 
-                if (config.blocksEnabled) visitor.blockEnd(gitLabInlineMath);
+                if (config.blocksEnabled) visitor.blockEnd(jLatexMathBlock);
             }
         });
     }
