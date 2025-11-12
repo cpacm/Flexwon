@@ -11,11 +11,11 @@ import io.noties.markwon.image.ImageSizeResolver;
 /**
  * @since 4.3.0
  */
-class JLatextAsyncDrawable extends AsyncDrawable {
+class JLatexAsyncDrawable extends AsyncDrawable {
 
     private final boolean isBlock;
 
-    JLatextAsyncDrawable(
+    JLatexAsyncDrawable(
             @NonNull String destination,
             @NonNull AsyncDrawableLoader loader,
             @NonNull ImageSizeResolver imageSizeResolver,

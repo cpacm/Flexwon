@@ -1,11 +1,13 @@
 package io.noties.markwon.ext.strikethrough;
 
 import android.text.style.StrikethroughSpan;
+import android.text.style.SubscriptSpan;
 
 import androidx.annotation.NonNull;
 
 import com.vladsch.flexmark.ext.gfm.strikethrough.Strikethrough;
-import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
+import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughSubscriptExtension;
+import com.vladsch.flexmark.ext.gfm.strikethrough.Subscript;
 import com.vladsch.flexmark.parser.Parser;
 
 import java.util.Collections;
@@ -34,7 +36,7 @@ public class StrikethroughPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void configureParser(@NonNull Parser.Builder builder) {
-        builder.extensions(Collections.singleton(StrikethroughExtension.create()));
+        builder.extensions(Collections.singleton(StrikethroughSubscriptExtension.create()));
     }
 
     @Override
@@ -43,6 +45,13 @@ public class StrikethroughPlugin extends AbstractMarkwonPlugin {
             @Override
             public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
                 return new StrikethroughSpan();
+            }
+        });
+
+        builder.setFactory(Subscript.class, new SpanFactory() {
+            @Override
+            public Object getSpans(@NonNull MarkwonConfiguration configuration, @NonNull RenderProps props) {
+                return new SubscriptSpan();
             }
         });
     }
@@ -55,6 +64,15 @@ public class StrikethroughPlugin extends AbstractMarkwonPlugin {
                 final int length = visitor.length();
                 visitor.visitChildren(strikethrough);
                 visitor.setSpansForNodeOptional(strikethrough, length);
+            }
+        });
+
+        builder.on(Subscript.class, new MarkwonVisitor.NodeVisitor<Subscript>() {
+            @Override
+            public void visit(@NonNull MarkwonVisitor visitor, @NonNull Subscript subscript) {
+                final int length = visitor.length();
+                visitor.visitChildren(subscript);
+                visitor.setSpansForNodeOptional(subscript, length);
             }
         });
     }

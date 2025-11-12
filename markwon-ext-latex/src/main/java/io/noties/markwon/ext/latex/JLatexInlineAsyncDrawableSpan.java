@@ -18,7 +18,7 @@ class JLatexInlineAsyncDrawableSpan extends JLatexAsyncDrawableSpan {
 
     private final AsyncDrawable drawable;
 
-    JLatexInlineAsyncDrawableSpan(@NonNull MarkwonTheme theme, @NonNull JLatextAsyncDrawable drawable, @ColorInt int color) {
+    JLatexInlineAsyncDrawableSpan(@NonNull MarkwonTheme theme, @NonNull JLatexAsyncDrawable drawable, @ColorInt int color) {
         super(theme, drawable, color);
         this.drawable = drawable;
     }

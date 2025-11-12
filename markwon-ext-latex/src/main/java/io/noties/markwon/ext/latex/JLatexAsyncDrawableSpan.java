@@ -19,13 +19,13 @@ import ru.noties.jlatexmath.awt.Color;
  */
 public class JLatexAsyncDrawableSpan extends AsyncDrawableSpan {
 
-    private final JLatextAsyncDrawable drawable;
+    private final JLatexAsyncDrawable drawable;
     private final int color;
     private boolean appliedTextColor;
 
     public JLatexAsyncDrawableSpan(
             @NonNull MarkwonTheme theme,
-            @NonNull JLatextAsyncDrawable drawable,
+            @NonNull JLatexAsyncDrawable drawable,
             @ColorInt int color) {
         super(theme, drawable, ALIGN_CENTER, false);
         this.drawable = drawable;
@@ -51,7 +51,7 @@ public class JLatexAsyncDrawableSpan extends AsyncDrawableSpan {
     }
 
     @NonNull
-    public JLatextAsyncDrawable drawable() {
+    public JLatexAsyncDrawable drawable() {
         return drawable;
     }
 

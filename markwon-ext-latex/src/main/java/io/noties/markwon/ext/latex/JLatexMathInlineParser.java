@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class JLatexMathInlineParser implements InlineParserExtension {
     Pattern MATH_PATTERN = Pattern.compile("\\$`((?:.|\n)*?)`\\$");
-    Pattern MATH_PATTERN2 = Pattern.compile("\\$((?:.|\n)*?)\\$");
+    //Pattern MATH_PATTERN2 = Pattern.compile("\\$((?:.|\n)*?)\\$");
 
     public JLatexMathInlineParser(LightInlineParser inlineParser) {
     }
@@ -32,10 +32,9 @@ public class JLatexMathInlineParser implements InlineParserExtension {
 
     @Override
     public boolean parse(@NotNull LightInlineParser inlineParser) {
-        if (inlineParser.peek() == '$') {
+        if (inlineParser.peek(1) == '`') {
             BasedSequence input = inlineParser.getInput();
             Matcher matcher = inlineParser.matcher(MATH_PATTERN);
-            if (matcher == null || !matcher.find()) matcher = inlineParser.matcher(MATH_PATTERN2);
             if (matcher != null) {
                 inlineParser.flushTextNode();
 
